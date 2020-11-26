@@ -43,6 +43,8 @@ test -d "$wal_master_live_dir" && echo " WAL live directory exist!" || (echo "Cr
 echo "max_wal_size = 2GB" >> $PGDATA/postgresql.auto.conf
 
 
+sudo mount -t cifs -o gid=26,uid=26,username=meadlai,rw,hard //192.168.50.51/shared/ /mnt/smb/
+
 # Master Setting
 # Not block the transaction with WAL
 synchronous_commit = 'off'
