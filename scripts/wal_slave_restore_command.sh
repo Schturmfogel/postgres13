@@ -3,7 +3,7 @@ log_dir='/mnt/smb/'
 wal_nas_dir='/mnt/smb/'
 dir_postfix=`hostname --long`
 wal_master_live_dir='/mnt/smb/wal_master_live'
-log_echo_prefix=' #script# '`date "+%F %T"`' @$dir_postfix #'
+log_echo_prefix=' #wal_slave_restore_script# '`date "+%F %T"`' @$dir_postfix #'
 
 #  %p
 p_archive_path=$1

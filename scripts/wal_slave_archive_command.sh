@@ -2,8 +2,8 @@
 log_dir='/mnt/smb/'
 wal_nas_dir='/mnt/smb/'
 dir_postfix=`hostname --long`
-wal_master_live_dir='/mnt/smb/wal_master_live'
-log_echo_prefix=' #script# '`date "+%F %T"`' @$dir_postfix #'
+wal_slave_archive_dir='/mnt/smb/wal_slave_archive_'$dir_postfix
+log_echo_prefix=' #wal_slave_archive_script# '`date "+%F %T"`' @$dir_postfix #'
 
 #  %p
 p_archive_path=$1
@@ -35,14 +35,14 @@ then
 	echo "$log_echo_prefix: WAL NAS directory exist: $wal_nas_dir"
 else
 	echo "$log_echo_prefix: Unable to find NAS disk: $wal_nas_dir, this archive cmd will exit with success code, although failed."
-	echo "$log_echo_prefix: Unable to find NAS disk: $wal_nas_dir">>$log_dir'error_master_archive.log'
+	echo "$log_echo_prefix: Unable to find NAS disk: $wal_nas_dir">>$log_dir'error_slave_archive_'$dir_postfix'.log'
 	exit 0
 fi
 
 #
-test -d "$wal_master_live_dir" && echo "$log_echo_prefix: WAL live directory exist: $wal_master_live_dir" || (echo "$log_echo_prefix: Creating the WAL live directory: $wal_master_live_dir" && mkdir $wal_master_live_dir)
+test -d "$wal_slave_archive_dir" && echo "$log_echo_prefix: WAL slave archive directory exist: $wal_slave_archive_dir" || (echo "$log_echo_prefix: Creating the WAL live directory: $wal_slave_archive_dir" && mkdir $wal_slave_archive_dir)
 #
-gzip < $p_archive_path > $wal_master_live_dir/$p_archive_filename.gz 2>>$log_dir'error_master_archive.log' || :
-echo $p_archive_filename >> $wal_master_live_dir/archive.list
+gzip < $p_archive_path > $wal_slave_archive_dir/$p_archive_filename.gz 2>>$log_dir'error_slave_archive_'$dir_postfix'.log' || :
+echo $p_archive_filename >> $wal_slave_archive_dir/archive.list
 #
 exit 0
