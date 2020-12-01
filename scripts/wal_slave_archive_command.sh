@@ -1,9 +1,9 @@
 #!/bin/bash
 log_dir='/mnt/smb/'
 wal_nas_dir='/mnt/smb/'
-dir_postfix=`hostname --long`
+dir_postfix=`hostname`
 wal_slave_archive_dir='/mnt/smb/wal_slave_archive_'$dir_postfix
-log_echo_prefix=' #wal_slave_archive_script# '`date "+%F %T"`' @$dir_postfix #'
+log_echo_prefix=' #wal_slave_archive_script# '`date "+%F %T"`' #'${dir_postfix}'#'
 
 #  %p
 p_archive_path=$1

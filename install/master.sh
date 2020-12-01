@@ -37,18 +37,17 @@ systemctl disable firewalld.service
 
 
 # Eable archive
-sudo mount -t cifs -o gid=26,uid=26,username=meadlai,rw,hard //192.168.50.51/shared/ /mnt/smb/
+sudo mount -t cifs -o gid=26,uid=26,username=meadlai,password=mblaiqinyi33,rw,hard,vers=2.0 //192.168.50.51/shared/ /mnt/smb/
 wal_master_live_dir='/mnt/smb/wal_master_live'
 test -d "$wal_master_live_dir" && echo " WAL live directory exist!" || (echo "Creating the WAL live directory: $wal_master_live_dir" && mkdir $wal_master_live_dir)
 echo "max_wal_size = 2GB" >> $PGDATA/postgresql.auto.conf
 
 
-sudo mount -t cifs -o gid=26,uid=26,username=meadlai,rw,hard //192.168.50.51/shared/ /mnt/smb/
-
 # Master Setting
 # Not block the transaction with WAL
-synchronous_commit = 'off'
-archive_mode = 'ON'
+synchronous_commit = off
+# Archive setting
+archive_mode = ON
 archive_command = '/var/lib/pgsql/scripts/wal_master_archive_command.sh %p %f'
-listen_addresses = '*'
+
 

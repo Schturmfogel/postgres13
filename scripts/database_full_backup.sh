@@ -1,14 +1,16 @@
 #!/bin/bash
+#
+#
 
-db_user_postgres_password='mblaiqinyi33'
-db_user_replicator_password='linux'
+source /var/lib/pgsql/scripts/ahead_config.sh
+
 
 set timeout 60
 
 #
 backup_nas_dir='/mnt/smb/'
-dir_postfix=`hostname --long`
-#dir_postfix=`hostname`
+#dir_postfix=`hostname --long`
+dir_postfix=`hostname`
 
 backup_full_database_dump_dir='/mnt/smb/full_database_dump_'$dir_postfix
 backup_full_database_snapshot_dir='/mnt/smb/full_database_snapshot_'$dir_postfix
@@ -30,15 +32,16 @@ test -d "$backup_full_database_dump_dir" && echo "$log_echo_prefix: database dum
 # create the folder if not exists
 test -d "$backup_full_database_snapshot_dir" && echo "$log_echo_prefix: database snapshot directory exist: $backup_full_database_snapshot_dir" || (echo "$log_echo_prefix: Creating the database snapshot directory: $backup_full_database_snapshot_dir" && mkdir $backup_full_database_snapshot_dir)
 #
+
 dump_file_name='FULL_DATABASE_DUMP_'`date "+%Y_%m_%d_T_%H_%M_%S"`'.dmp'
 snapshot_folder_name='FULL_DATABASE_SNAPSHOT_'`date "+%Y_%m_%d_T_%H_%M_%S"`
 
 # create the folder if not exists
 test -d "$snapshot_folder_name" && echo "$log_echo_prefix: database snapshot directory exist: $snapshot_folder_name" || (echo "$log_echo_prefix: Creating the database snapshot directory: $snapshot_folder_name" && mkdir $backup_full_database_snapshot_dir'/'$snapshot_folder_name)
-#
-#pg_dumpall -h 192.168.3.137 -U postgres -p 5432 -f $backup_full_database_dump_dir/$dump_file_name
+
+#pg_dumpall -h localhost -U postgres -p 5432 -f /mnt/smb/test_dumpall.dmp
 /usr/bin/expect <<-EOF
-	spawn pg_dumpall -h 192.168.3.137 -U postgres -p 5432 -f $backup_full_database_dump_dir/$dump_file_name
+	spawn pg_dumpall -h localhost -U postgres -p 5432 -f $backup_full_database_dump_dir/$dump_file_name
 	while 1 {
 		expect "Password:"
 		send "${db_user_postgres_password}\n"
@@ -50,8 +53,9 @@ cd $backup_full_database_dump_dir
 #
 gzip $backup_full_database_dump_dir'/'$dump_file_name
 
+#pg_basebackup -h localhost -U replicator -p 5432 -D /mnt/smb/test_backup -Fp -Xs -P -R
 /usr/bin/expect <<-EOF
-	spawn pg_basebackup -h 192.168.3.137 -U replicator -p 5432 -D $backup_full_database_snapshot_dir/$snapshot_folder_name -Fp -Xs -P -R
+	spawn pg_basebackup -h localhost -U replicator -p 5432 -D $backup_full_database_snapshot_dir/$snapshot_folder_name -Fp -Xs -P -R
 	expect "Password:"
 	send "${db_user_replicator_password}\n"
 expect eof
