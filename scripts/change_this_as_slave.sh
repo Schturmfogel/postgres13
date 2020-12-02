@@ -7,7 +7,7 @@ echo '      *******************************************'
 echo '      *'
 echo '      * Warning:: This script will make this VM as a slave node.'
 echo '      * Warning:: The data in this VM would be DELETED!'
-echo '      * Warning:: Pull the data from master_node: '${master_node}
+echo '      * Warning:: Pull the data from master_node: ${master_node}'
 echo '      * Warning:: Users can NOT execute DML and DLL in this database.'
 echo '      * Warning:: Keep READ ONLY transactions in this VM.'
 echo '      *    '

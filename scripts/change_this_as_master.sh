@@ -38,8 +38,9 @@ echo '      The '
 
 
 cp ./config_master/postgresql.auto.conf ${PGDATA}/postgresql.auto.conf
+# make this writable.
 rm -f ${PGDATA}/standby.signal
-## to_do: update other slave nodes
+## 
 
 
 
@@ -53,3 +54,10 @@ EOF
 
 psql -c "CREATE USER replicator WITH REPLICATION ENCRYPTED PASSWORD '${db_user_replicator_password}'";
 psql -c "ALTER SYSTEM SET listen_addresses TO '*'";
+
+
+
+echo '      Restarting postgresql-13'
+echo '      Task completed!'
+echo '      '
+echo '      '

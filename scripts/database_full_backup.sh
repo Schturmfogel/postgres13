@@ -5,8 +5,6 @@
 source /var/lib/pgsql/scripts/ahead_config.sh
 
 
-set timeout 60
-
 #
 backup_nas_dir='/mnt/smb/'
 #dir_postfix=`hostname --long`
@@ -14,7 +12,7 @@ dir_postfix=`hostname`
 
 backup_full_database_dump_dir='/mnt/smb/full_database_dump_'$dir_postfix
 backup_full_database_snapshot_dir='/mnt/smb/full_database_snapshot_'$dir_postfix
-log_echo_prefix=' #database_baskup_script# '`date "+%F %T"`' @$dir_postfix #'
+log_echo_prefix=' #database_baskup_script# '`date "+%F %T"`' '${dir_postfix}' #'
 
 if [ -d "$backup_nas_dir" ]
 then 
@@ -61,7 +59,12 @@ gzip $backup_full_database_dump_dir'/'$dump_file_name
 expect eof
 EOF
 
-cd $backup_full_database_snapshot_dir
-#
-zip -r ./$snapshot_folder_name'.zip' ./$snapshot_folder_name
+cd $backup_full_database_snapshot_dir/$snapshot_folder_name
+zip -r ../$snapshot_folder_name'.zip' *
+
 rm -rf $backup_full_database_snapshot_dir'/'$snapshot_folder_name
+
+echo '      '
+echo '      Backup job done!'
+echo '      '
+echo '      '
