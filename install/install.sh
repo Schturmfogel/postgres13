@@ -69,5 +69,7 @@ vi /etc/ssh/sshd_config
 su - postgres -c "psql -c \"ALTER SYSTEM SET listen_addresses TO '*';\""
 su - postgres -c "psql -c \"CREATE USER replicator WITH REPLICATION ENCRYPTED PASSWORD 'the_password_of_db_replicator_user';\""
 su - postgres -c "psql -c \"ALTER USER postgres WITH PASSWORD 'the_password_of_user_postgres';\""
+echo "the_password_of_Postgres" | passwd --stdin postgres
+
 
 
