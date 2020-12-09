@@ -41,6 +41,10 @@ sudo mount -t cifs -o gid=26,uid=26,username=meadlai,password=mblaiqinyi33,rw,ha
 sudo systemctl start postgresql-13
 
 
+############
+echo "host all         all        0.0.0.0/0        scram-sha-256" >> $PGDATA/pg_hba.conf
+echo "host all         all        ::0/0            scram-sha-256" >> $PGDATA/pg_hba.conf
+
 ###########
 sudo mkdir /var/lib/pgsql/scripts
 #cp scripts/* /var/lib/pgsql/scripts
